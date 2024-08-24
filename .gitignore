@@ -1,0 +1,50 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+*.swp
+*~
+pesa
+# Django
+*.log
+*.pot
+*.pyc
+*.pyo
+.venv/
+staticfiles/
+.coverage
+db.sqlite3
+/media/
+*.sqlite3
+
+# Environment Variables
+.env
+
+# IDEs and Editors
+.vscode/
+.idea/
+.mypy_cache/
+.pytest_cache/
+.ropeproject/
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# JetBrains
+.idea/
+
+# Anaconda
+.conda/
+.ipynb_checkpoints/
