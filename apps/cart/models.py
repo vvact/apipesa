@@ -1,32 +1,33 @@
-# apps/cart/models.py
-
 from django.db import models
 from apps.products.models import Product
-from django.contrib.auth.models import User
+from django.utils import timezone
 
 class Cart(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
-    session_id = models.CharField(max_length=255, null=True, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
+    session_key = models.CharField(max_length=40, unique=True,default='default_session_key')
+    created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
-    items = models.ManyToManyField('CartItem', related_name='carts')  # Use a unique related_name here
 
     def __str__(self):
-        return f'Cart {self.id}'
+        return f"Cart with session key {self.session_key}"
     
-    @property
-    def total_cart_price(self):
-        return sum(item.total_price for item in self.items.all())
+    def get_total_price(self):
+        total = sum(item.get_total_price() for item in self.items.all())
+        return total
+    
 
 class CartItem(models.Model):
-    cart = models.ForeignKey(Cart, related_name='cart_items', on_delete=models.CASCADE)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
+
+    cart = models.ForeignKey(Cart, related_name='items', on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField()
+    quantity = models.PositiveIntegerField(default=1)
+    added_at = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
-        return f'{self.quantity} of {self.product.name}'
+        return f"{self.quantity} x {self.product.name} in Cart"
+    
+    def get_total_price(self):
+        return self.quantity * self.product.price
     
     @property
-    def total_price(self):
-        return self.price * self.quantity
+    def price(self):
+        return self.product.price
