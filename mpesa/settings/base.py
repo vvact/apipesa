@@ -31,6 +31,7 @@ DJANGO_APPS = [
 THIRD_PARTY_APPS = [
     "rest_framework",
     "django_filters",
+    "django_daraja",
 ]
 
 LOCAL_APPS = [
